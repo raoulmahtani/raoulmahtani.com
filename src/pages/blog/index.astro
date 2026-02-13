@@ -1,32 +1,31 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-const blogModules = import.meta.glob('../../content/blog/*.md', { eager: true });
-const posts = Object.values(blogModules)
-  .map((module: any) => ({
-    ...module.frontmatter,
-    slug: module.file ? module.file.split('/').pop().replace('.md', '') : '',
-  }))
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 ---
-<BaseLayout title="Blog | Raoul Mahtani">
-  <section style="margin-top: 2rem;">
-    <h2>Blog</h2>
-    <p style="color: #cbd5f5; max-width: 60ch;">
-      Notes from the SRE trenches, experiments on toolchains, and whatever I build when a pager sleepifies me. Bookmark the
-      section and drop back when you want the latest thoughts.
+<BaseLayout title="Raoul Mahtani | Blog">
+  <section style="margin-top: 3rem;">
+    <h1 style="margin-bottom: 0.5rem;">Journal</h1>
+    <p style="color: #cbd5f5; margin-bottom: 1.5rem;">
+      Longer posts, deployment notes, and lessons from life as an SRE.
     </p>
+    <div style="display: grid; gap: 1.25rem;">
+      {posts.map((post) => (
+        <article
+          style="background: rgba(15, 23, 42, 0.7); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.15);"
+          key={post.slug}
+        >
+          <p style="color: #94a3b8; margin: 0 0 0.3rem; font-size: 0.9rem;">
+            {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </p>
+          <h2 style="margin: 0 0 0.5rem;">{post.data.title}</h2>
+          <p style="color: #cbd5f5; margin: 0 0 0.75rem; line-height: 1.6;">{post.data.summary}</p>
+          <a href={`/blog/${post.slug}`} style="color: #facc15; text-decoration: none; font-weight: 600;">Read →</a>
+        </article>
+      ))}
+    </div>
   </section>
-  <div class="grid" style="margin-top: 2rem;">
-    {posts.map((post) => (
-      <article
-        style="background: rgba(15, 23, 42, 0.7); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.15);"
-        key={post.slug}
-      >
-        <p style="color: #94a3b8; margin: 0; font-size: 0.85rem;">{new Date(post.date).toLocaleDateString()}</p>
-        <h3 style="margin-top: 0.5rem;">{post.title}</h3>
-        <p style="color: #cbd5f5; line-height: 1.6;">{post.summary}</p>
-        <a href={`/blog/${post.slug}`} style="color: #facc15; font-weight: 600;">Read →</a>
-      </article>
-    ))}
-  </div>
 </BaseLayout>

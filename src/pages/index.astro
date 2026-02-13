@@ -1,15 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 
 const resumeUrl = 'https://github.com/raoulmahtani/raoulmahtani/raw/main/resume.pdf';
-const blogModules = import.meta.glob('../content/blog/*.md', { eager: true });
-const posts = Object.values(blogModules)
-  .map((module: any) => ({
-    ...module.frontmatter,
-    slug: module.file ? module.file.split('/').pop().replace('.md', '') : '',
-    content: module.default && module.default.render ? module.default.render().body : '',
-  }))
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+const posts = (await getCollection('blog'))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 3);
 ---
 <BaseLayout title="Raoul Mahtani | SRE & storyteller">
@@ -75,9 +70,9 @@ const posts = Object.values(blogModules)
           style="background: rgba(15, 23, 42, 0.7); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.15);"
           key={post.slug}
         >
-          <p style="color: #94a3b8; margin: 0; font-size: 0.9rem;">{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
-          <h3 style="margin: 0.5rem 0;">{post.title}</h3>
-          <p style="color: #cbd5f5; line-height: 1.6;">{post.summary}</p>
+          <p style="color: #94a3b8; margin: 0; font-size: 0.9rem;">{new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+          <h3 style="margin: 0.5rem 0;">{post.data.title}</h3>
+          <p style="color: #cbd5f5; line-height: 1.6;">{post.data.summary}</p>
           <a
             href={`/blog/${post.slug}`}
             style="color: #facc15; font-weight: 600; text-decoration: none;"

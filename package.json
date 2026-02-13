@@ -2,13 +2,19 @@
   "name": "raoulmahtani-site",
   "type": "module",
   "version": "0.0.1",
+  "homepage": "https://raoulmahtani.github.io/raoulmahtani.com",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "deploy": "npm run build && gh-pages -d dist",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.17.1"
+    "astro": "^5.17.1",
+    "playwright": "^1.58.2"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
   }
 }
