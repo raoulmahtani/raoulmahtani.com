@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const resumeUrl = 'https://github.com/raoulmahtani/raoulmahtani/raw/main/resume.pdf';
+const blogModules = import.meta.glob('../content/blog/*.md', { eager: true });
+const posts = Object.values(blogModules)
+  .map((module: any) => ({
+    ...module.frontmatter,
+    slug: module.file ? module.file.split('/').pop().replace('.md', '') : '',
+    content: module.default && module.default.render ? module.default.render().body : '',
+  }))
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  .slice(0, 3);
+---
+<BaseLayout title="Raoul Mahtani | SRE & storyteller">
+  <section style="margin-top: 2rem;">
+    <p style="color: #f9c74f; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 0.5rem;">SRE · writer · curious human</p>
+    <h2 style="margin-top: 0; font-size: clamp(2rem, 4vw, 3rem);">Keeping systems stable and stories readable.</h2>
+    <p style="max-width: 56ch; color: #cbd5f5; font-size: 1.1rem; line-height: 1.8;">
+      I’m an SRE at Flatiron Health. This site is my sandbox for notes, experiments, and a lightweight archive of what I’m obsessing
+      over (and how I get things done when I’m not sleeping next to alerts).
+    </p>
+  </section>
+
+  <section id="about" style="margin-top: 3rem;">
+    <div class="grid grid-two" style="align-items: stretch;">
+      <article style="background: rgba(15, 23, 42, 0.8); padding: 1.75rem; border-radius: 1rem; box-shadow: 0 20px 45px rgba(2, 6, 23, 0.45);">
+        <h3>About me</h3>
+        <p style="color: #cbd5f5; line-height: 1.7;">
+          I build reliable platforms and help teams feel confident that their software behaves when it matters. My toolkit covers
+          distributed systems, Python tooling, and documenting the why behind the fix. When I’m not wrangling alerts, I’m tucked
+          away writing about ideas that make ops easier.
+        </p>
+      </article>
+      <article style="background: rgba(15, 23, 42, 0.6); padding: 1.75rem; border-radius: 1rem;">
+        <h3>Quick hits</h3>
+        <ul style="padding-left: 1rem; color: #cbd5f5; line-height: 1.7;">
+          <li>Current home: Flatiron Health · SRE</li>
+          <li>Currently experimenting with: edge monitoring, automated incident playbooks, and writing more publicly.</li>
+          <li>Outside the console: books, road cycling, and cooking insanely spicy food.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="resume" style="margin-top: 3rem; display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: stretch;">
+    <article style="flex: 1; min-width: 250px; background: rgba(15, 23, 42, 0.7); padding: 1.5rem; border-radius: 1rem;">
+      <h3>Resume</h3>
+      <p style="color: #cbd5f5; line-height: 1.7;">
+        My full resume lives on GitHub. Hit the link below to download the latest PDF or open it inline in a new tab.
+      </p>
+      <a href={resumeUrl} style="color: #facc15; font-weight: 600; text-decoration: none;">Open resume (GitHub)</a>
+      <p style="margin-top: 0.75rem; color: #94a3b8; font-size: 0.9rem;">If you prefer me to host a copy on this site, drop me a note.</p>
+    </article>
+    <article style="flex: 1 1 320px; background: rgba(15, 23, 42, 0.6); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(250, 204, 21, 0.25);">
+      <h3>Analytics & monitoring</h3>
+      <p style="color: #cbd5f5; line-height: 1.7;">
+        Right now I’m thinking GoatCounter or Cloudflare Web Analytics for a lightweight, privacy-friendly view of traffic without
+        loading heavy scripts. Once we deploy through GitHub Pages or Cloudflare Pages, I can drop in the snippet of your choice.
+      </p>
+      <p style="margin: 0; color: #cbd5f8; font-size: 0.9rem;">
+        Want me to wire one in today? Just say which provider you prefer.
+      </p>
+    </article>
+  </section>
+
+  <section id="blog" style="margin-top: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <h2 style="margin: 0;">Blog</h2>
+      <a href="/blog" style="color: #facc15; text-decoration: none; font-weight: 600;">See all posts →</a>
+    </div>
+    <div class="grid" style="margin-top: 1.5rem;">
+      {posts.map((post) => (
+        <article
+          style="background: rgba(15, 23, 42, 0.7); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.15);"
+          key={post.slug}
+        >
+          <p style="color: #94a3b8; margin: 0; font-size: 0.9rem;">{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+          <h3 style="margin: 0.5rem 0;">{post.title}</h3>
+          <p style="color: #cbd5f5; line-height: 1.6;">{post.summary}</p>
+          <a
+            href={`/blog/${post.slug}`}
+            style="color: #facc15; font-weight: 600; text-decoration: none;"
+          >
+            Read →
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

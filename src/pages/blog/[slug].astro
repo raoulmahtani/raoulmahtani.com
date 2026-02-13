@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const blogModules = import.meta.glob('../../content/blog/*.md', { eager: true });
+const slug = Astro.params.slug;
+const post = Object.values(blogModules).find((module: any) => module.file?.endsWith(`/${slug}.md`));
+if (!post) {
+  throw new Error('Post not found');
+}
+---
+<BaseLayout title={`${post.frontmatter.title} | Raoul Mahtani`}>
+  <section style="margin-top: 2rem;">
+    <p style="color: #94a3b8; font-size: 0.9rem; margin: 0;">{new Date(post.frontmatter.date).toLocaleDateString()}</p>
+    <h2 style="margin-bottom: 0.5rem;">{post.frontmatter.title}</h2>
+    <div style="color: #cbd5f5; line-height: 1.8;">
+      <post.default />
+    </div>
+  </section>
+  <a href="/blog" style="display: inline-block; margin-top: 2rem; color: #facc15; font-weight: 600;">← All posts</a>
+</BaseLayout>

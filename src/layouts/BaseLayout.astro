@@ -1,0 +1,99 @@
+---
+const { title = 'Raoul Mahtani' } = Astro.props;
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" />
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: 'Inter', 'DM Sans', system-ui, -apple-system, sans-serif;
+        background-color: #0f172a;
+        color: #e2e8f0;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #020617;
+      }
+      .page {
+        width: min(1100px, 94vw);
+        margin: 0 auto;
+        padding: 2rem 0 3rem;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        position: sticky;
+        top: 0;
+        background: rgba(2, 6, 23, 0.95);
+        backdrop-filter: blur(12px);
+        z-index: 10;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+      nav a {
+        color: #94a3b8;
+        text-decoration: none;
+        margin-left: 1.5rem;
+        font-weight: 500;
+        font-size: 0.95rem;
+      }
+      nav a:hover {
+        color: #facc15;
+      }
+      footer {
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+        padding-top: 2rem;
+        margin-top: 3rem;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 0.9rem;
+      }
+      .grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+      @media (min-width: 768px) {
+        .grid-two {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        header nav a:first-of-type {
+          margin-left: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header>
+        <div>
+          <h1>Raoul Mahtani</h1>
+          <p style="margin: 0; color: #94a3b8; font-size: 0.95rem;">SRE @ Flatiron Health</p>
+        </div>
+        <nav>
+          <a href="#about">About</a>
+          <a href="#resume">Resume</a>
+          <a href="#blog">Blog</a>
+        </nav>
+      </header>
+      <main>
+        {Astro.content}
+      </main>
+      <footer>
+        Built with Astro • © {new Date().getFullYear()} Raoul Mahtani
+      </footer>
+    </div>
+  </body>
+</html>
