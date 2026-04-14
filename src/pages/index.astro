@@ -6,152 +6,185 @@ const resumeUrl = 'https://github.com/raoulmahtani/resume/raw/refs/heads/main/Ra
 const posts = (await getCollection('blog'))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 3);
-
-const experience = [
-  {
-    company: 'Flatiron Health',
-    title: 'Senior Site Reliability Engineer',
-    timeline: 'Jan 2024 – Present · Remote (New York, NY)',
-    description:
-      'Leading reliability initiatives for Flatiron’s clinical research platform, pairing observability projects with incident prevention playbooks while mentoring the next generation of SREs.',
-  },
-  {
-    company: 'Flatiron Health',
-    title: 'Site Reliability Engineer',
-    timeline: 'May 2022 – Jan 2024 · New York, NY',
-    description:
-      'Owned production readiness for health data pipelines; shipped automation around deployment guards, runbooks, and operational telemetry.',
-  },
-  {
-    company: 'BlackRock',
-    title: 'Site Reliability Engineer',
-    timeline: 'Jun 2017 – May 2022 · Greater Philadelphia',
-    description:
-      'Architected automation across Node.js/Cassandra/Angular services, authored HashiCorp-backed deployment playbooks, and built Kafka consumers to surface real-time platform metrics.',
-  },
-  {
-    company: 'BlackRock',
-    title: 'GTI Rotational Analyst',
-    timeline: 'Jul 2014 – Feb 2017 · Wilmington, DE',
-    description:
-      'Administered enterprise Windows infrastructure, led storage zoning projects, and helped run disaster recovery rehearsals for the East Coast data center.',
-  },
-];
-
-const hobbies = [
-  'Tracking the stock market’s narrative arcs and using events to shape experimental automation ideas.',
-  'Following real estate cycles closely—especially small coastal markets like my Rehoboth Beach Airbnb.',
-  'Collecting vintage timepieces and learning the craft of horology whenever a call never comes.',
-  'Cooking spicy food that matches the intensity of a production incident response.',
-];
 ---
-<BaseLayout title="Raoul Mahtani | SRE & storyteller">
-  <section style="margin-top: 2rem;">
-    <p style="color: #f9c74f; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 0.5rem;">SRE · writer · curious human</p>
-    <h2 style="margin-top: 0; font-size: clamp(2rem, 4vw, 3rem);">Keeping systems stable and stories readable.</h2>
-    <p style="max-width: 56ch; color: #cbd5f5; font-size: 1.1rem; line-height: 1.8;">
-      I’m an SRE at Flatiron Health. I’ve baked reliability into clinical research platforms by shipping observability, automation, and
-      on-call tooling that lets investigators focus on delivering care rather than firefighting. Raised in Jamaica, I blend serious business
-      culture with an engineer’s curiosity—always asking how we can automate the next manual guardrail or document the playbook for the
-      next incident.
+<BaseLayout title="Raoul Mahtani — Senior Site Reliability Engineer">
+
+  <!-- Hero -->
+  <section style="margin-top: 3rem; max-width: 720px;">
+    <p style="color: #f9c74f; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.8rem; margin: 0 0 0.5rem;">Senior Site Reliability Engineer</p>
+    <h1 style="margin: 0 0 1rem; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2;">Raoul Mahtani</h1>
+    <p style="font-size: 1.2rem; color: #e2e8f0; margin: 0 0 1rem; font-weight: 500;">
+      I build reliable infrastructure, automate operational toil, and design systems that scale.
+    </p>
+    <p style="color: #94a3b8; font-size: 1rem; line-height: 1.8; max-width: 60ch;">
+      Currently a Senior Site Reliability Engineer at Flatiron Health, where I focus on infrastructure automation,
+      observability, and reliability engineering for healthcare systems.
+      Outside of work I build tools, experiment with distributed systems, and write about reliability engineering and system design.
     </p>
   </section>
 
-  <section id="about" style="margin-top: 3rem;">
-    <h3 style="margin-bottom: 1rem;">About me</h3>
-    <div class="grid grid-two" style="align-items: stretch;">
-      <article style="background: rgba(15, 23, 42, 0.8); padding: 1.75rem; border-radius: 1rem; box-shadow: 0 20px 45px rgba(2, 6, 23, 0.45);">
-        <p style="color: #cbd5f5; line-height: 1.7; margin-bottom: 1rem;">
-          I build reliable platforms and help teams feel confident that their software behaves when it matters. My toolkit covers distributed
-          systems, Python tooling, and capturing the “why” behind every fix so we can explain it to other humans.
-        </p>
-        <p style="color: #cbd5f5; line-height: 1.7; margin-bottom: 1rem;">Outside the console, I’m all about long rides, travel, and exploring new approaches to leadership in operations.</p>
-        <p style="margin: 0; color: #cbd5f5; line-height: 1.7;">Hobbies? Keep scrolling.</p>
-      </article>
-      <article style="background: rgba(15, 23, 42, 0.6); padding: 1.75rem; border-radius: 1rem;">
-        <h4 style="margin-top: 0;">Experience highlights</h4>
-        <ul style="padding-left: 1rem; color: #cbd5f5; line-height: 1.7;">
-          <li>Flatiron Health SRE since 2022, focused on automation, observability, and partnered incidents.</li>
-          <li>BlackRock SRE/analyst shaping automation for Node.js/Cassandra platforms and driving infrastructure playbooks (Packer/Terraform).</li>
-          <li>GTI rotational work on enterprise Windows infrastructure, standby DR rehearsals, and storage modernization.</li>
-        </ul>
-      </article>
-    </div>
-  </section>
-
-  <section id="experience" style="margin-top: 3rem;">
-    <h3>Professional timeline</h3>
-    <div class="grid" style="margin-top: 1rem;">
-      {experience.map((entry) => (
-        <article
-          style="background: rgba(15, 23, 42, 0.7); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.15);"
-          key={entry.title + entry.company}
-        >
-          <p style="color: #94a3b8; margin: 0 0 0.25rem; font-size: 0.9rem;">{entry.timeline}</p>
-          <h4 style="margin: 0 0 0.5rem;">{entry.title}</h4>
-          <p style="color: #cbd5f5; margin: 0 0 0.5rem; line-height: 1.6; font-weight: 600;">{entry.company}</p>
-          <p style="color: #cbd5f5; margin: 0; line-height: 1.6; font-size: 0.95rem;">{entry.description}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-
-  <section id="hobbies" style="margin-top: 3rem;">
-    <h3>Hobbies & interests</h3>
-    <p style="color: #cbd5f5; max-width: 60ch;">
-      I keep a few side projects alive to sharpen creativity—stock market narratives to inform automation ideas, a Rehoboth Beach Airbnb,
-      timepiece collecting, and spicy food experiments that rival a production incident for intensity.
+  <!-- About -->
+  <section id="about" style="margin-top: 4rem; max-width: 720px;">
+    <h2>About</h2>
+    <p style="color: #cbd5e1; line-height: 1.8;">
+      I'm a Site Reliability Engineer focused on making complex systems predictable, observable, and easy to operate.
     </p>
-    <ul style="padding-left: 1rem; color: #cbd5f5; line-height: 1.7;">
-      {hobbies.map((item) => (
-        <li key={item}>{item}</li>
-      ))}
+    <p style="color: #cbd5e1; line-height: 1.8;">
+      My work sits at the intersection of infrastructure automation, distributed systems, and reliability engineering.
+      I care about designing systems that are not only scalable, but also operationally simple and resilient under failure.
+    </p>
+    <p style="color: #94a3b8; margin-bottom: 0.5rem;">Professionally, I've spent the last several years working on:</p>
+    <ul style="color: #cbd5e1; line-height: 1.8; padding-left: 1.25rem;">
+      <li>Infrastructure automation with Terraform</li>
+      <li>Cloud architecture on AWS</li>
+      <li>Reliability engineering using SLOs and observability</li>
+      <li>Reducing operational toil through automation</li>
     </ul>
+    <p style="color: #cbd5e1; line-height: 1.8;">
+      At Flatiron Health I've worked on modernizing infrastructure, improving reliability, and reducing operational overhead
+      across production environments. Outside of my day job I build side projects focused on distributed systems,
+      developer tooling, and automation.
+    </p>
   </section>
 
-  <section id="resume" style="margin-top: 3rem; display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: stretch;">
-    <article style="flex: 1; min-width: 250px; background: rgba(15, 23, 42, 0.7); padding: 1.5rem; border-radius: 1rem;">
-      <h3>Resume</h3>
-      <p style="color: #cbd5f5; line-height: 1.7;">
-        Download the latest PDF (mirror from my resume repository) or open it inline in a new tab.
-      </p>
-      <a href={resumeUrl} style="color: #facc15; font-weight: 600; text-decoration: none;">Open resume</a>
-      <p style="margin-top: 0.75rem; color: #94a3b8; font-size: 0.9rem;">Let me know if you want other formats (Markdown, Notion, etc.).</p>
+  <!-- Experience -->
+  <section id="experience" style="margin-top: 4rem; max-width: 720px;">
+    <h2>Work Experience</h2>
+
+    <article style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(15,23,42,0.7); border-radius: 0.75rem; border: 1px solid rgba(148,163,184,0.15);">
+      <p style="color: #94a3b8; margin: 0 0 0.25rem; font-size: 0.875rem;">2022 – Present</p>
+      <h3 style="margin: 0 0 0.25rem;">Senior Site Reliability Engineer</h3>
+      <p style="color: #f9c74f; margin: 0 0 1rem; font-weight: 600;">Flatiron Health</p>
+      <ul style="color: #cbd5e1; line-height: 1.8; padding-left: 1.25rem; margin: 0;">
+        <li>Led a migration from Ansible-based provisioning to Terraform-based Infrastructure as Code, modularizing infrastructure so entire client environments can be provisioned in minutes instead of weeks.</li>
+        <li>Helped transition a critical healthcare application from monolithic infrastructure to a load-balanced architecture, dramatically improving system reliability.</li>
+        <li>Implemented infrastructure optimization initiatives that reduced cloud spend by over $1M annually through right-sizing and usage analysis.</li>
+        <li>Built automation and observability tooling to reduce operational toil and improve system visibility across production environments.</li>
+      </ul>
     </article>
-    <article style="flex: 1 1 320px; background: rgba(15, 23, 42, 0.6); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(250, 204, 21, 0.25);">
-      <h3>Analytics & monitoring</h3>
-      <p style="color: #cbd5f5; line-height: 1.7;">
-        Right now I’m thinking GoatCounter or Cloudflare Web Analytics for a lightweight, privacy-friendly view of traffic without
-        loading heavy scripts. Once we deploy through GitHub Pages or Cloudflare Pages, I can drop in the snippet of your choice.
+
+    <article style="margin-top: 1.25rem; padding: 1.5rem; background: rgba(15,23,42,0.6); border-radius: 0.75rem; border: 1px solid rgba(148,163,184,0.1);">
+      <p style="color: #94a3b8; margin: 0 0 0.25rem; font-size: 0.875rem;">Jun 2017 – May 2022</p>
+      <h3 style="margin: 0 0 0.25rem;">Site Reliability Engineer</h3>
+      <p style="color: #f9c74f; margin: 0 0 1rem; font-weight: 600;">BlackRock</p>
+      <ul style="color: #cbd5e1; line-height: 1.8; padding-left: 1.25rem; margin: 0;">
+        <li>Authored deployment playbooks and infrastructure automation using HashiCorp tooling (Terraform, Packer, Vault).</li>
+        <li>Built Kafka consumers to surface real-time platform metrics for operational visibility.</li>
+        <li>Delivered automation across Node.js/Cassandra/Angular services, reducing manual intervention in the deployment pipeline.</li>
+      </ul>
+    </article>
+
+    <article style="margin-top: 1.25rem; padding: 1.5rem; background: rgba(15,23,42,0.5); border-radius: 0.75rem; border: 1px solid rgba(148,163,184,0.08);">
+      <p style="color: #94a3b8; margin: 0 0 0.25rem; font-size: 0.875rem;">Jul 2014 – May 2017</p>
+      <h3 style="margin: 0 0 0.25rem;">GTI Rotational Analyst</h3>
+      <p style="color: #f9c74f; margin: 0 0 1rem; font-weight: 600;">BlackRock</p>
+      <ul style="color: #cbd5e1; line-height: 1.8; padding-left: 1.25rem; margin: 0;">
+        <li>Administered enterprise Windows infrastructure and led storage zoning projects.</li>
+        <li>Ran disaster recovery rehearsals for the East Coast data center.</li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" style="margin-top: 4rem; max-width: 720px;">
+    <h2>Projects</h2>
+
+    <article style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(15,23,42,0.7); border-radius: 0.75rem; border: 1px solid rgba(250,204,21,0.2);">
+      <h3 style="margin: 0 0 0.5rem;">Daedalus — Distributed Systems Project</h3>
+      <p style="color: #cbd5e1; line-height: 1.8; margin-bottom: 1rem;">
+        A distributed agent platform designed for large-scale infrastructure introspection and automation.
+        The system allows a central control node to query and orchestrate thousands of agents across an infrastructure environment.
       </p>
-      <p style="margin: 0; color: #cbd5f8; font-size: 0.9rem;">
-        Want me to wire one in today? Just say which provider you prefer.
+      <p style="color: #94a3b8; margin-bottom: 0.4rem; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Key capabilities</p>
+      <ul style="color: #cbd5e1; line-height: 1.8; padding-left: 1.25rem; margin: 0 0 1rem;">
+        <li>Horizontal scalability across thousands of nodes</li>
+        <li>Secure agent registration using API key authentication</li>
+        <li>Distributed command execution across infrastructure fleets</li>
+        <li>Centralized query execution with aggregated results</li>
+        <li>Web interface for issuing queries and monitoring node status</li>
+        <li>Structured response collection and searchable history</li>
+      </ul>
+      <p style="color: #94a3b8; margin-bottom: 0.4rem; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Use cases</p>
+      <ul style="color: #cbd5e1; line-height: 1.8; padding-left: 1.25rem; margin: 0 0 1rem;">
+        <li>Infrastructure inventory</li>
+        <li>Fleet-wide diagnostics</li>
+        <li>Operational automation</li>
+        <li>Distributed command execution</li>
+      </ul>
+      <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.7; margin: 0;">
+        Future iterations will include natural language queries translated into system commands using open-source language models.
       </p>
     </article>
   </section>
 
-  <section id="blog" style="margin-top: 3rem;">
-    <div style="display: flex; justify-content: space-between; align-items: baseline;">
-      <h2 style="margin: 0;">Blog</h2>
-      <a href="/blog" style="color: #facc15; text-decoration: none; font-weight: 600;">See all posts →</a>
+  <!-- Engineering Philosophy -->
+  <section id="philosophy" style="margin-top: 4rem; max-width: 720px;">
+    <h2>Engineering Philosophy</h2>
+    <p style="color: #94a3b8; line-height: 1.8; margin-bottom: 1.5rem;">The most valuable infrastructure systems share a few traits.</p>
+    <div style="display: grid; gap: 1rem;">
+      {[
+        { title: 'Automation first', body: 'If something must be done more than once, it should be automated.' },
+        { title: 'Observability over guesswork', body: 'Reliable systems require good telemetry: logs, metrics, traces, and meaningful alerts.' },
+        { title: 'Operational simplicity', body: "The best systems are not the most complex ones — they're the ones that are easiest to run in production." },
+        { title: 'Failure is inevitable', body: 'Systems should be designed assuming things will break.' },
+      ].map(({ title, body }) => (
+        <div style="padding: 1.25rem 1.5rem; background: rgba(15,23,42,0.6); border-radius: 0.75rem; border-left: 3px solid #facc15;">
+          <p style="margin: 0 0 0.25rem; font-weight: 700; color: #f1f5f9;">{title}</p>
+          <p style="margin: 0; color: #94a3b8; line-height: 1.7;">{body}</p>
+        </div>
+      ))}
     </div>
-    <div class="grid" style="margin-top: 1.5rem;">
+  </section>
+
+  <!-- Writing -->
+  <section id="blog" style="margin-top: 4rem; max-width: 720px;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <h2 style="margin: 0;">Writing</h2>
+      <a href="/blog" style="color: #facc15; text-decoration: none; font-weight: 600; font-size: 0.9rem;">All posts →</a>
+    </div>
+    <p style="color: #94a3b8; line-height: 1.8; margin-top: 0.75rem;">
+      I write occasionally about reliability engineering, distributed systems, infrastructure automation, and building engineering tools.
+      Posts can be found in the blog section of this site.
+    </p>
+    <div style="display: grid; gap: 1rem; margin-top: 1.5rem;">
       {posts.map((post) => (
-        <article
-          style="background: rgba(15, 23, 42, 0.7); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(148, 163, 184, 0.15);"
-          key={post.slug}
-        >
-          <p style="color: #94a3b8; margin: 0; font-size: 0.9rem;">{new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
-          <h3 style="margin: 0.5rem 0;">{post.data.title}</h3>
-          <p style="color: #cbd5f5; line-height: 1.6;">{post.data.summary}</p>
-          <a
-            href={`/blog/${post.slug}`}
-            style="color: #facc15; font-weight: 600; text-decoration: none;"
-          >
-            Read →
-          </a>
+        <article style="padding: 1.25rem 1.5rem; background: rgba(15,23,42,0.7); border-radius: 0.75rem; border: 1px solid rgba(148,163,184,0.12);" key={post.slug}>
+          <p style="color: #64748b; margin: 0 0 0.25rem; font-size: 0.85rem;">
+            {new Date(post.data.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </p>
+          <h3 style="margin: 0 0 0.5rem; font-size: 1rem;">{post.data.title}</h3>
+          <p style="color: #94a3b8; margin: 0 0 0.75rem; line-height: 1.6; font-size: 0.95rem;">{post.data.summary}</p>
+          <a href={`/blog/${post.slug}`} style="color: #facc15; text-decoration: none; font-weight: 600; font-size: 0.9rem;">Read →</a>
         </article>
       ))}
     </div>
   </section>
+
+  <!-- Resume -->
+  <section id="resume" style="margin-top: 4rem; max-width: 720px;">
+    <h2>Resume</h2>
+    <p style="color: #94a3b8; line-height: 1.8;">
+      Full work history and technical background available as a PDF.
+    </p>
+    <a href={resumeUrl} style="display: inline-block; margin-top: 0.75rem; padding: 0.6rem 1.25rem; background: #facc15; color: #020617; font-weight: 700; border-radius: 0.5rem; text-decoration: none; font-size: 0.95rem;">Download Resume</a>
+  </section>
+
+  <!-- Personal -->
+  <section id="personal" style="margin-top: 4rem; max-width: 720px;">
+    <h2>Personal</h2>
+    <p style="color: #94a3b8; line-height: 1.8;">
+      I grew up in Jamaica and have always been interested in how complex systems work — whether that's infrastructure, software, or organizations.
+      Outside of engineering I enjoy traveling, fitness, writing, and exploring new places and ideas.
+    </p>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" style="margin-top: 4rem; max-width: 720px;">
+    <h2>Contact</h2>
+    <p style="color: #94a3b8; line-height: 1.8;">
+      If you'd like to connect, collaborate, or discuss engineering ideas, feel free to reach out.
+    </p>
+    <a href="https://www.linkedin.com/in/raoulmahtani" style="color: #facc15; text-decoration: none; font-weight: 600;">LinkedIn →</a>
+  </section>
+
 </BaseLayout>
