@@ -36,14 +36,21 @@ const { title = 'Raoul Mahtani' } = Astro.props;
         z-index: 10;
       }
       header h1 { margin: 0; font-size: 1.5rem; }
-      nav a {
+      nav { display: flex; align-items: center; }
+      nav a,
+      nav button {
         color: #94a3b8;
+        background: none;
+        border: none;
+        font: inherit;
         text-decoration: none;
         margin-left: 1.25rem;
         font-weight: 500;
         font-size: 0.95rem;
+        cursor: pointer;
       }
-      nav a:hover { color: #facc15; }
+      nav a:hover,
+      nav button:hover { color: #facc15; }
       footer {
         border-top: 1px solid rgba(148,163,184,0.2);
         padding-top: 2rem;
@@ -52,9 +59,35 @@ const { title = 'Raoul Mahtani' } = Astro.props;
         color: #94a3b8;
         font-size: 0.9rem;
       }
-      .grid { display: grid; gap: 1.5rem; }
-      @media (min-width: 768px) {
-        .grid-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pacman-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 6, 23, 0.95);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 50;
+        flex-direction: column;
+        padding: 1rem;
+      }
+      .pacman-overlay.visible { display: flex; }
+      .pacman-container {
+        position: relative;
+        width: 360px;
+        background: #01040b;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 1rem;
+        padding: 1rem;
+      }
+      .pacman-close {
+        position: absolute;
+        top: 0.25rem;
+        right: 0.5rem;
+        background: transparent;
+        border: none;
+        color: #facc15;
+        font-size: 1rem;
+        cursor: pointer;
       }
     </style>
   </head>
@@ -71,6 +104,7 @@ const { title = 'Raoul Mahtani' } = Astro.props;
           <a href="/#resume">Resume</a>
           <a href="/blog">Blog</a>
           <a href="https://www.linkedin.com/in/raoulmahtani/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <button id="pacman-toggle" aria-label="Play Pac-Man">Pac-Man</button>
         </nav>
       </header>
       <main>
@@ -80,5 +114,107 @@ const { title = 'Raoul Mahtani' } = Astro.props;
         Built with Astro • © {new Date().getFullYear()} Raoul Mahtani
       </footer>
     </div>
+
+    <div id="pacman-overlay" class="pacman-overlay" aria-hidden="true">
+      <div class="pacman-container">
+        <button class="pacman-close" aria-label="Close Pac-Man">✕</button>
+        <canvas id="pacman-canvas" width="360" height="360" style="display:block; background:#01040b; border-radius:0.75rem;"></canvas>
+        <p style="color:#94a3b8; margin-top:0.75rem; font-size:0.85rem;">Arrow keys move Pac-Man. Close or click outside to exit.</p>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const overlay = document.getElementById('pacman-overlay');
+        const toggle = document.getElementById('pacman-toggle');
+        const close = overlay.querySelector('.pacman-close');
+        const canvas = document.getElementById('pacman-canvas');
+        const ctx = canvas.getContext('2d');
+        const grid = 12;
+        const tile = 30;
+        const dots = [];
+        for (let y = 0; y < grid; y++) {
+          for (let x = 0; x < grid; x++) {
+            if (x === 0 || y === 0 || x === grid - 1 || y === grid - 1) continue;
+            dots.push({ x, y, eaten: false });
+          }
+        }
+        const pac = { x: 5, y: 5, dirX: 1, dirY: 0 };
+        const speed = 200;
+        let interval;
+
+        const draw = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = '#020617';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = '#facc15';
+          dots.forEach(dot => {
+            if (!dot.eaten) {
+              ctx.beginPath();
+              ctx.arc(dot.x * tile + tile / 2, dot.y * tile + tile / 2, 3, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          });
+          const mouth = Math.abs(Math.sin(Date.now() / 200)) * 0.4;
+          ctx.beginPath();
+          ctx.fillStyle = '#facc15';
+          ctx.moveTo(pac.x * tile + tile / 2, pac.y * tile + tile / 2);
+          const startAngle = mouth * Math.PI;
+          const endAngle = 2 * Math.PI - startAngle;
+          ctx.arc(pac.x * tile + tile / 2, pac.y * tile + tile / 2, tile / 2 - 2, startAngle + Math.atan2(pac.dirY, pac.dirX), endAngle + Math.atan2(pac.dirY, pac.dirX));
+          ctx.closePath();
+          ctx.fill();
+        };
+
+        const move = () => {
+          pac.x = Math.min(Math.max(pac.x + pac.dirX, 1), grid - 2);
+          pac.y = Math.min(Math.max(pac.y + pac.dirY, 1), grid - 2);
+          dots.forEach(dot => {
+            if (!dot.eaten && dot.x === pac.x && dot.y === pac.y) {
+              dot.eaten = true;
+            }
+          });
+          draw();
+        };
+
+        const start = () => {
+          if (interval) clearInterval(interval);
+          interval = setInterval(move, speed);
+        };
+
+        toggle.addEventListener('click', () => {
+          overlay.classList.toggle('visible');
+          overlay.setAttribute('aria-hidden', overlay.classList.contains('visible') ? 'false' : 'true');
+          if (overlay.classList.contains('visible')) {
+            start();
+            document.addEventListener('keydown', onKeydown);
+          } else {
+            document.removeEventListener('keydown', onKeydown);
+            clearInterval(interval);
+          }
+        });
+
+        const hide = () => {
+          overlay.classList.remove('visible');
+          overlay.setAttribute('aria-hidden', 'true');
+          clearInterval(interval);
+          document.removeEventListener('keydown', onKeydown);
+        };
+
+        close.addEventListener('click', hide);
+        overlay.addEventListener('click', (event) => { if (event.target === overlay) hide(); });
+
+        const onKeydown = (event) => {
+          switch (event.key) {
+            case 'ArrowUp': pac.dirX = 0; pac.dirY = -1; break;
+            case 'ArrowDown': pac.dirX = 0; pac.dirY = 1; break;
+            case 'ArrowLeft': pac.dirX = -1; pac.dirY = 0; break;
+            case 'ArrowRight': pac.dirX = 1; pac.dirY = 0; break;
+          }
+        };
+
+        draw();
+      })();
+    </script>
   </body>
 </html>
